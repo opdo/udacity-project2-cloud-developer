@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { filterImageFromURL, deleteLocalFiles } from './util/util';
-import fs from "fs";
 
 (async () => {
 
@@ -30,15 +29,15 @@ import fs from "fs";
 
   /**************************************************************************** */
   app.get("/filteredimage/", (req: Request, res: Response) => {
-    let { image_url } = req.query;
+    const img: ImageURL = req.query;
 
     // Validate the image_url query
-    if (!image_url) {
+    if (!img.image_url) {
       return res.status(400).send("Missing 'image_url'");
     }
 
     // Call filterImageFromURL(image_url) to filter the image
-    return filterImageFromURL(image_url).then((filterText) => {
+    return filterImageFromURL(img.image_url).then((filterText) => {
       // Send the resulting file in the response
       return res.status(200).sendFile(filterText, (err) => {
         // Deletes any files on the server on finish of the response
