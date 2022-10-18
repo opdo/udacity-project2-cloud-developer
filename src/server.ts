@@ -39,11 +39,11 @@ import fs from "fs";
 
     // Call filterImageFromURL(image_url) to filter the image
     return filterImageFromURL(image_url).then((filterText) => {
-      // Deletes any files on the server on finish of the response
-      deleteLocalFiles([filterText]);
-
       // Send the resulting file in the response
-      return res.status(200).send(filterText);
+      return res.status(200).sendFile(filterText, (err) => {
+        // Deletes any files on the server on finish of the response
+        deleteLocalFiles([filterText]);
+      });
     }).catch((errorMsg) => {
       return res.status(400).send(errorMsg.message);
     });
